@@ -1,0 +1,76 @@
+
+var sectionsToHide = ["Sports"];
+
+const storiesDivClassName = "lBwEZb";
+const sectionHeaderClassName = "dSva6b";
+const sectionTitleClassName = "wmzpFf";
+
+var storiesDiv;
+var observer;
+
+chrome.extension.sendMessage({}, function(response) {
+	var readyStateCheckInterval = setInterval(function() {
+	if (document.readyState === "complete") {
+		clearInterval(readyStateCheckInterval);
+
+		// ----------------------------------------------------------
+		// This part of the script triggers when page is done loading
+		// ----------------------------------------------------------
+		startWatcher();
+	}
+	}, 5);
+});
+
+startWatcher = () => {
+	storiesDiv = document.getElementsByClassName(storiesDivClassName)[0];
+
+	addMutationObserver(storiesDiv);	
+}
+
+addMutationObserver = (targetNode) => {
+	const obsOptions = { childList: true, attributes: true, subtree: false };
+	observer = new MutationObserver(mutationCallback);
+	observer.observe(targetNode, obsOptions);
+}
+
+mutationCallback = (mutationList, observer) => {
+	var titleElement = findElementByClassNameAndContent(sectionTitleClassName, sectionsToHide[0]);
+
+	if(titleElement != undefined){
+		var sectionHeader = titleElement.parentElement.parentElement.parentElement.parentElement;
+
+		observer.disconnect();
+		observer = null;
+		removeSiblingUntilNextHeader(sectionHeader, true);
+		sectionHeader.style.display = "none";
+	}
+}
+
+removeSiblingUntilNextHeader = (element, skipMe) => {
+	var sibling = element.nextElementSibling;
+		
+	if(sibling){
+		if(!skipMe && sibling.classList.contains(sectionHeaderClassName)){
+			return;
+		} else {
+			sibling.style.visibility = "hidden";
+			sibling.style.display = "none";
+			removeSiblingUntilNextHeader(sibling, false);
+		}
+	}
+
+}
+
+findElementByClassNameAndContent = (className, content) => {
+	var elements = document.getElementsByClassName(className);
+	var found;
+
+	for (var i = 0; i < elements.length; i++) {
+		if (elements[i].textContent == content) {
+			found = elements[i];
+			break;
+		}
+	}
+
+	return found;
+}

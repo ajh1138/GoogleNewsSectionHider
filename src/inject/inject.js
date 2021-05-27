@@ -1,5 +1,5 @@
 
-var sectionsToHide = ["Sports"];
+var sectionsToHide = [];
 
 const storiesDivClassName = "lBwEZb";
 const sectionHeaderClassName = "dSva6b";
@@ -8,49 +8,59 @@ const sectionTitleClassName = "wmzpFf";
 var storiesDiv;
 var observer;
 
-chrome.extension.sendMessage({}, function(response) {
-	var readyStateCheckInterval = setInterval(function() {
-	if (document.readyState === "complete") {
-		clearInterval(readyStateCheckInterval);
+chrome.extension.sendMessage({}, function (response) {
+	var readyStateCheckInterval = setInterval(function () {
+		if (document.readyState === "complete") {
+			clearInterval(readyStateCheckInterval);
 
-		// ----------------------------------------------------------
-		// This part of the script triggers when page is done loading
-		// ----------------------------------------------------------
-		startWatcher();
-	}
+			// ----------------------------------------------------------
+			// This part of the script triggers when page is done loading
+			// ----------------------------------------------------------
+			chrome.storage.sync.get(["hiddenSections"], function (result) {
+				sectionsToHide = result.hiddenSections.split(",");
+
+				startWatcher();
+			});
+		}
 	}, 5);
 });
 
 startWatcher = () => {
 	storiesDiv = document.getElementsByClassName(storiesDivClassName)[0];
 
-	addMutationObserver(storiesDiv);	
+	addMutationObserver(storiesDiv);
 }
 
 addMutationObserver = (targetNode) => {
-	const obsOptions = { childList: true, attributes: true, subtree: false };
-	observer = new MutationObserver(mutationCallback);
-	observer.observe(targetNode, obsOptions);
+	if (targetNode instanceof HTMLElement) {
+		const obsOptions = { childList: true, attributes: true, subtree: false };
+		observer = new MutationObserver(mutationCallback);
+		observer.observe(targetNode, obsOptions);
+	} else {
+		console.log("targetNode is not a DOM element", targetNode);
+	}
 }
 
 mutationCallback = (mutationList, observer) => {
-	var titleElement = findElementByClassNameAndContent(sectionTitleClassName, sectionsToHide[0]);
+	for (i = 0; i < sectionsToHide.length; i++) {
+		var titleElement = findElementByClassNameAndContent(sectionTitleClassName, sectionsToHide[i]);
+		console.log("titleElement", titleElement);
+		if (titleElement != undefined) {
+			var sectionHeader = titleElement.parentElement.parentElement.parentElement.parentElement;
 
-	if(titleElement != undefined){
-		var sectionHeader = titleElement.parentElement.parentElement.parentElement.parentElement;
-
-		observer.disconnect();
-		observer = null;
-		removeSiblingUntilNextHeader(sectionHeader, true);
-		sectionHeader.style.display = "none";
+			//	observer.disconnect();
+			//	observer = null;
+			removeSiblingUntilNextHeader(sectionHeader, true);
+			sectionHeader.style.display = "none";
+		}
 	}
 }
 
 removeSiblingUntilNextHeader = (element, skipMe) => {
 	var sibling = element.nextElementSibling;
-		
-	if(sibling){
-		if(!skipMe && sibling.classList.contains(sectionHeaderClassName)){
+
+	if (sibling) {
+		if (!skipMe && sibling.classList.contains(sectionHeaderClassName)) {
 			return;
 		} else {
 			sibling.style.visibility = "hidden";
@@ -58,7 +68,6 @@ removeSiblingUntilNextHeader = (element, skipMe) => {
 			removeSiblingUntilNextHeader(sibling, false);
 		}
 	}
-
 }
 
 findElementByClassNameAndContent = (className, content) => {

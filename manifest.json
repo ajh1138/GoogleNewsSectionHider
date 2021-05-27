@@ -16,8 +16,12 @@
     ],
     "persistent": true
   },
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
   "permissions": [
-    "https://news.google.com/*"
+    "https://news.google.com/*",
+    "storage"
   ],
   "content_scripts": [
     {

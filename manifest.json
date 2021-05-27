@@ -1,17 +1,17 @@
 {
-  "name": "Google News Section Hider",
+  "name": "News Section Hider",
   "version": "0.0.1",
   "manifest_version": 2,
   "description": "Hides sections from Google News",
   "homepage_url": "http://sarcasmic.net",
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/news_icon_16.png",
+    "48": "icons/news_icon_48.png",
+    "128": "icons/news_icon_128.png"
   },
   "default_locale": "en",
   "browser_action": {
-    "default_popup": "popup.html"
+    "default_popup": "src/popup/popup.html"
   },
   "permissions": [
     "https://news.google.com/*",

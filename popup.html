@@ -3,46 +3,25 @@
 
 <head>
     <title>Google News Section Hider</title>
-    <style rel="stylesheet">
-        body {
-            width: 320px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 13px;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        #list-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        ul.unstyled {
-            list-style: none;
-        }
-
-        ul.unstyled li {
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+    </link>
 
 </head>
 
 <body>
     <h2>Google News Section Hider</h2>
-    Select sections to hide: <br />
 
-    <div id="list-container">
+    <div id="main-container">
+        Select sections to hide: <br />
+
         <ul class="unstyled" id="optionsList">
 
         </ul>
+
+        <button id="btnReload">Reload News Page</button>
     </div>
 
 
-    <button id="btnReload">Reload</button>
     <script type="text/javascript" src="popup.js"> </script>
 </body>
 

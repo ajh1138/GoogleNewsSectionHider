@@ -1,4 +1,3 @@
-
 var sectionsToHide = [];
 
 const storiesDivClassName = "lBwEZb";
@@ -69,6 +68,8 @@ removeSiblingUntilNextHeader = (element, skipMe) => {
 		}
 	}
 }
+
+
 
 findElementByClassNameAndContent = (className, content) => {
 	var elements = document.getElementsByClassName(className);

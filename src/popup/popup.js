@@ -1,5 +1,5 @@
 var optionsArray = [
-    "Headlines", "For you", "U.S.", "World", "(City)", "Business",
+    "Headlines", "For you", "U.S.", "World", "Business",
     "Technology", "Entertainment", "Sports", "Science", "Health",
 ];
 

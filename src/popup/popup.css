@@ -5,7 +5,16 @@ body {
 }
 
 h2 {
+	display: flex;
+	align-items: center;
+	justify-items: center;
+	justify-self: center;
+	justify-content: center;
 	text-align: center;
+}
+
+h2 > img {
+	margin-right: 10px;
 }
 
 #main-container {
@@ -17,6 +26,7 @@ h2 {
 
 ul.unstyled {
 	list-style: none;
+	padding-inline: unset;
 }
 
 ul.unstyled li {
@@ -41,4 +51,9 @@ ul.unstyled li label {
 #btnReload:active {
 	transform: scale(0.98);
 	box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+#credits {
+	font-size: 10px;
+	margin-top: 20px;
 }
